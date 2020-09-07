@@ -1,0 +1,4 @@
+// exportActionTypes   (DONT DELETE THIS LINE: USED FOR BATTLECRY DUCK GENERATOR)
+export const SCROLL_LOCK = 'utils/SCROLL-LOCK';
+export const LOGIN_FORM = "utils/LOGIN-FORM";
+export const LOGIN_REGISTRATION_FORM = "utils/LOGIN-REGISTRATION-FORM";
