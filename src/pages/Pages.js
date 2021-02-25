@@ -1,18 +1,38 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 
-import { routes } from '../utils/routes';
+import useAuth from '../hooks/useAuth';
 
-import Home from './Home';
-import Post from './Post';
-import PostForm from './PostForm';
+import News from '../components/News';
+import SinglePage from './SinglePage';
+import SingleEditPage from './SingleEditPage';
+import SingleNewPage from './SingleNewPage';
 
-const Pages = () => (
-  <Switch>
-    <Route exact path={routes.home} component={Home} />
-    <Route exact path={routes.posts} component={Post} />
-    <Route exact path={routes.postCreate} component={PostForm} />
-    <Route exact path={routes.postEdit} component={PostForm} />
-  </Switch>
-);
+const Pages = () => {
+  const {isLoggedIn} = useAuth();
+  const location = useLocation();
+  const path = location.pathname;
+
+  return (
+    <main className={`app-main${path === '/' ? '' : ' app-main-single'}`}>
+      <Switch>
+        {isLoggedIn &&
+        <Route path={`/news/new`}>
+          <SingleNewPage />
+        </Route>}
+        {isLoggedIn &&
+        <Route path={`/news/edit/:id`}>
+          <SingleEditPage />
+        </Route>}
+        <Route path={`/news/:id`}>
+          <SinglePage />
+        </Route>
+        <Route path='/' exact>
+          <News />
+        </Route>
+      </Switch>
+    </main>
+  );
+}
+
 export default Pages;

@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux'
-// reducerImports   (DONT DELETE THIS LINE: USED FOR BATTLECRY DUCK GENERATOR)
+import { combineReducers } from 'redux';
+import authReducer from './auth/authReducer';
+import postReducer from './post/postReducer';
 
-import utils from "./utils/utilsReducer";
+const reducers = combineReducers({
+  auth: authReducer,
+  post: postReducer,
+})
 
-const reducer = combineReducers({
-  utils
-});
-
-export default reducer
-
+export default reducers

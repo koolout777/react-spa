@@ -1,20 +1,18 @@
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
-import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
 
-const GRAPHQL_URI = process.env.REACT_APP_GRAPHQL_URI;
+const ENDPOINT_URI = 'http://localhost:4000';
+const CACHE = new InMemoryCache();
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('token');
-  const authorizationHeader = token ? `Bearer ${JSON.parse(token).access_token}` : null
   return {
     headers: {
       ...headers,
-      authorization: authorizationHeader,
-    }
+      authorization: token ? `${token}` : '',
+    },
   }
 });
 
@@ -29,7 +27,7 @@ const httpLink = ApolloLink.from([
     if (networkError) console.log(`[Network error]: ${networkError}`);
   }),
   createUploadLink({
-    uri: GRAPHQL_URI,
+    uri: ENDPOINT_URI,
     fetchOptions: {
       mode: 'cors',
     },
@@ -38,6 +36,5 @@ const httpLink = ApolloLink.from([
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache: CACHE
 });
-

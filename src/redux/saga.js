@@ -1,22 +1,59 @@
-import { all, takeLatest, setContext } from 'redux-saga/effects';
+import { all, fork, takeLatest, setContext } from 'redux-saga/effects';
 import { client } from './../utils/apollo';
 
-// actionTypes   (DONT DELETE THIS LINE: USED FOR BATTLECRY DUCK GENERATOR)
-import { SCROLL_LOCK  } from './modules/utils/utilsTypes.js';
-import { LOGIN_FORM } from "./modules/utils/utilsTypes.js";
-import { LOGIN_REGISTRATION_FORM } from "./modules/utils/utilsTypes.js";
+import {
+  AUTH_LOGIN,
+  AUTH_REGISTER
+} from './modules/auth/authTypes';
 
-// sagaActions   (DONT DELETE THIS LINE: USED FOR BATTLECRY DUCK GENERATOR)
-import { scrollLock  } from './modules/utils/utilsSaga.js';
-import { loginForm } from "./modules/utils/utilsSaga.js";
-import { loginRegistrationForm } from "./modules/utils/utilsSaga.js";
+import {
+  GET_POSTS,
+  GET_POST,
+  ADD_POST,
+  UPDATE_POST,
+  ADD_COMMENT
+} from './modules/post/postTypes';
+
+import { authLogin, authRegister } from './modules/auth/authSaga';
+import { getPosts, getPost, addPost, updatePost, addComment } from './modules/post/postSaga';
+
+export function* authRegisterSaga() {
+  yield takeLatest(AUTH_REGISTER, authRegister)
+}
+
+export function* authLoginSaga() {
+  yield takeLatest(AUTH_LOGIN, authLogin)
+}
+
+export function* getPostsSaga() {
+  yield takeLatest(GET_POSTS, getPosts)
+}
+
+export function* getPostSaga() {
+  yield takeLatest(GET_POST, getPost)
+}
+
+export function* addPostSaga() {
+  yield takeLatest(ADD_POST, addPost)
+}
+
+export function* updatePostSaga() {
+  yield takeLatest(UPDATE_POST, updatePost)
+}
+
+export function* addCommentSaga() {
+  yield takeLatest(ADD_COMMENT, addComment)
+}
 
 export default function* rootSaga() {
   yield setContext({ client })
   yield all([
-    takeLatest(SCROLL_LOCK, scrollLock),
-    takeLatest(LOGIN_FORM, loginForm),
-    takeLatest(LOGIN_REGISTRATION_FORM, loginRegistrationForm),
+    fork(authRegisterSaga),
+    fork(authLoginSaga),
+    fork(getPostSaga),
+    fork(addPostSaga),
+    fork(updatePostSaga),
+    fork(getPostsSaga),
+    fork(addCommentSaga),
   ])
 }
-

@@ -1,39 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import { BrowserRouter } from 'react-router-dom';
-import './assets/styles/style.scss'
-
-import { useUtils } from "./hooks/useUtils.js";
-
-import Header from './components/common/Header';
-import Footer from './components/common/Footer';
-import LoginRegistrationForm from "./components/auth/LoginRegistrationForm";
+import './App.scss';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Hero from './components/Hero';
 import Pages from './pages/Pages';
 
-
-function App() {
-
-  const { isScrollLock, isLoginRegistrationForm } = useUtils();
-  const [scrollLockClass, setScrollLockClass] = useState("");
-
-  useEffect(() => {
-    if (isScrollLock) {
-      setScrollLockClass("u-scroll-lock");
-    } else {
-      setScrollLockClass("");
-    }
-  }, [isScrollLock]);
-
+const App = () => {
   return (
-    <div className={`app ${scrollLockClass}`}>
-      <BrowserRouter>
-         <Header />
-         {!isLoginRegistrationForm ? console.log("pages") : console.log("login form")}
-         {!isLoginRegistrationForm ? <Pages /> : <LoginRegistrationForm />}
-         <Footer />
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <div className="app">
+        <Header />
+        <Switch>
+          <Route path='/' exact>
+            <Hero />
+          </Route>
+        </Switch>
+        <Pages />
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
-export default App;
 
+export default App;
